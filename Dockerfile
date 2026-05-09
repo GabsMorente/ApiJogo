@@ -3,10 +3,10 @@ FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /app
 
 # Copia arquivos essenciais
-COPY pom.xml .
-COPY mvnw .
+COPY ApiJogo-main/pom.xml .
+COPY ApiJogo-main/mvnw .
 COPY .mvn .mvn
-COPY src ./src
+COPY ApiJogo-main/src ./src
 
 # Dá permissão ao Maven Wrapper
 RUN chmod +x ./mvnw
