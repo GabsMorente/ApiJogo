@@ -1,0 +1,20 @@
+# IntelliJ
+.idea/
+*.iml
+
+# Maven
+target/
+*.jar
+!.mvn/wrapper/maven-wrapper.jar
+
+# Logs
+*.log
+
+# Environment variables
+.env
+application-*.yml
+application-*.properties
+
+# OS
+.DS_Store
+Thumbs.db
