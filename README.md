@@ -1,3 +1,3 @@
 # ApiJogo
 
-Link para testes: https://github.com/GabsMorente/ApiJogo
+Link para testes: https://apijogo-1.onrender.com/jogos
