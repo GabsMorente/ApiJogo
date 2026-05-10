@@ -5,10 +5,10 @@ API REST desenvolvida para gerenciamento de jogos.
 ## 🔗 Links
 
 - **API para testes:**  
-  [ApiJogo - Endpoint Jogos](https://apijogo-1.onrender.com/jogos?utm_source=chatgpt.com)
+  [ApiJogo - Endpoint Jogos](https://apijogo-1.onrender.com/jogos?)
 
 - **Login da aplicação:**  
-  [ApiJogo - Login](https://apijogo-1.onrender.com/login?utm_source=chatgpt.com)
+  [ApiJogo - Login](https://apijogo-1.onrender.com/login?)
 
 ---
 
