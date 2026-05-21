@@ -5,10 +5,10 @@ API REST desenvolvida para gerenciamento de jogos.
 ## 🔗 Links
 
 - **API para testes:**  
-  [ApiJogo - Endpoint Jogos](https://apijogo-2.onrender/jogos)
+  [ApiJogo - Endpoint Jogos](https://apijogo-2.onrender.com/jogos)
 
 - **Login da aplicação:**  
-  [ApiJogo - Login](https://apijogo-2.onrender/login)
+  [ApiJogo - Login](https://apijogo-2.onrender.com/login)
 
 ---
 
