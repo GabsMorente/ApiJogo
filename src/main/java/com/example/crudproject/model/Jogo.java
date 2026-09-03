@@ -3,18 +3,33 @@ package com.example.crudproject.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "jogos")
 public class Jogo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, length = 100)
     private String nome;
+
+    @Column(nullable = false, length = 50)
     private String tipo;
+
+    @Column(nullable = false)
     private Integer nota;
+
+    @Column(length = 1000)
     private String review;
 
     public Jogo() {
+    }
+
+    public Jogo(String nome, String tipo, Integer nota, String review) {
+        this.nome = nome;
+        this.tipo = tipo;
+        this.nota = nota;
+        this.review = review;
     }
 
     public Long getId() {

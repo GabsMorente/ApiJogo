@@ -1,14 +1,18 @@
 package com.example.crudproject.controller;
 
-import com.example.crudproject.model.Jogo;
+import com.example.crudproject.dto.JogoRequest;
+import com.example.crudproject.dto.JogoResponse;
 import com.example.crudproject.service.JogoService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
 
 @RestController
+@RequestMapping("/jogos")
 public class JogoController {
 
     private final JogoService service;
@@ -17,54 +21,57 @@ public class JogoController {
         this.service = service;
     }
 
-    @GetMapping("/jogos")
-    public List<Jogo> listar() {
-        return service.listar();
+    @GetMapping
+    public List<JogoResponse> listar() {
+        return service.listar().stream().map(JogoResponse::from).toList();
     }
 
-    @GetMapping("/jogos/{id}")
-    public ResponseEntity<Jogo> buscar(@PathVariable Long id) {
-
-        return service.buscarPorId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    @GetMapping("/{id}")
+    public JogoResponse buscar(@PathVariable Long id) {
+        return JogoResponse.from(service.buscarPorId(id));
     }
 
-    @PostMapping("/jogos")
-    public ResponseEntity<Jogo> criar(@RequestBody Jogo jogo) {
-
-        Jogo salvo = service.salvar(jogo);
-
-        return ResponseEntity
-                .created(URI.create("/jogos/" + salvo.getId()))
-                .body(salvo);
+    @PostMapping
+    public ResponseEntity<JogoResponse> criar(@Valid @RequestBody JogoRequest request) {
+        var salvo = service.criar(request);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(salvo.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(JogoResponse.from(salvo));
     }
 
-    @PutMapping("/jogos/{id}")
-    public ResponseEntity<Jogo> atualizar(
+    @PutMapping("/{id}")
+    public JogoResponse atualizar(
             @PathVariable Long id,
-            @RequestBody Jogo jogo) {
-
-        return service.buscarPorId(id)
-                .map(existente -> {
-
-                    existente.setNome(jogo.getNome());
-                    existente.setTipo(jogo.getTipo());
-                    existente.setNota(jogo.getNota());
-                    existente.setReview(jogo.getReview());
-
-                    Jogo atualizado = service.salvar(existente);
-
-                    return ResponseEntity.ok(atualizado);
-                })
-                .orElse(ResponseEntity.notFound().build());
+            @Valid @RequestBody JogoRequest request) {
+        return JogoResponse.from(service.atualizar(id, request));
     }
 
-    @DeleteMapping("/jogos/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Long id) {
-
         service.deletar(id);
-
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/buscar")
+    public List<JogoResponse> buscarComFiltros(
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) String tipo,
+            @RequestParam(required = false) Integer notaMinima) {
+        if (nome != null && !nome.isBlank()) {
+            return converter(service.buscarPorNome(nome));
+        }
+        if (tipo != null && !tipo.isBlank()) {
+            return converter(service.buscarPorTipo(tipo));
+        }
+        if (notaMinima != null) {
+            return converter(service.buscarPorNotaMinima(notaMinima));
+        }
+        return converter(service.listar());
+    }
+
+    private List<JogoResponse> converter(List<com.example.crudproject.model.Jogo> jogos) {
+        return jogos.stream().map(JogoResponse::from).toList();
     }
 }
