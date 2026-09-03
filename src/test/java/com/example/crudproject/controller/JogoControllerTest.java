@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.List;
 
@@ -78,6 +79,7 @@ class JogoControllerTest {
     @Test
     void deveCriarJogoValido() throws Exception {
         Jogo salvo = new Jogo("Minecraft", "Sandbox", 10, "Criativo");
+        ReflectionTestUtils.setField(salvo, "id", 12L);
         when(service.criar(any())).thenReturn(salvo);
 
         String json = objectMapper.writeValueAsString(new Pedido(
@@ -88,7 +90,7 @@ class JogoControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isCreated())
-                .andExpect(header().string("Location", "http://localhost/jogos/null"))
+                .andExpect(header().string("Location", "http://localhost/jogos/12"))
                 .andExpect(jsonPath("$.nome").value("Minecraft"));
     }
 
